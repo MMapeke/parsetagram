@@ -15,6 +15,8 @@ import com.parse.ParseFile;
 
 import java.util.List;
 
+import static android.view.View.GONE;
+
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     private Context context;
@@ -62,7 +64,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             post_user.setText(post.getUser().getUsername());
             ParseFile image = post.getImage();
             if(image != null) {
+                post_image.setVisibility(View.VISIBLE);
                 Glide.with(context).load(post.getImage().getUrl()).into(post_image);
+            }else{
+                post_image.setVisibility(View.GONE);
             }
         }
     }
