@@ -7,14 +7,13 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-
+<!--gotta fix instagram thing at top-->
     <ImageView
         android:id="@+id/instaText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/instagramfont"
         tools:srcCompat="@tools:sample/avatars" />
 
     <com.google.android.material.textfield.TextInputLayout
