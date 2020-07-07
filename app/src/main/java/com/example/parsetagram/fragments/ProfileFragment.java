@@ -26,10 +26,12 @@ public class ProfileFragment extends PostsFragment {
                     Log.e(TAG,"Issue w getting posts",e);
                     return;
                 }
-                for (Post post: objects){
-                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
-                }
+//                for (Post post: objects){
+//                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
+//                }
+                postsAdapter.clear();
                 allPosts.addAll(objects);
+                swipeRefreshLayout.setRefreshing(false);
                 postsAdapter.notifyDataSetChanged();
             }
         });

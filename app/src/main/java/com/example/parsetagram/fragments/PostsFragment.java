@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
     private RecyclerView rvPosts;
+    protected SwipeRefreshLayout swipeRefreshLayout;
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
 
@@ -49,6 +51,15 @@ public class PostsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
+        swipeRefreshLayout = view.findViewById(R.id.swipeContainer);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG,"User getting new data");
+                queryPosts();
+            }
+        });
 
         allPosts = new ArrayList<>();
         postsAdapter = new PostsAdapter(getContext(),allPosts);
@@ -71,10 +82,12 @@ public class PostsFragment extends Fragment {
                     Log.e(TAG,"Issue w getting posts",e);
                     return;
                 }
-                for (Post post: objects){
-                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
-                }
+//                for (Post post: objects){
+//                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
+//                }
+                postsAdapter.clear();
                 allPosts.addAll(objects);
+                swipeRefreshLayout.setRefreshing(false);
                 postsAdapter.notifyDataSetChanged();
             }
         });
