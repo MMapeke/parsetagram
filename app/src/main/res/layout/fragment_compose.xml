@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="Write a description..."
-        android:singleLine="false"></EditText>
+        android:singleLine="false" />
 
     <Button
         android:id="@+id/btnSubmit"

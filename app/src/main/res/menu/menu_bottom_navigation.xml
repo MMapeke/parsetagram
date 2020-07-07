@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_home"
-        android:icon="@drawable/instagram_home_filled_24"
+        android:icon="@drawable/states_action_home"
         android:title="Home"
         app:showAsAction="always">
     </item>
@@ -12,12 +12,12 @@
 <!--    use state icon files for compose and profile-->
     <item
         android:id="@+id/action_compose"
-        android:icon="@drawable/instagram_new_post_outline_24"
+        android:icon="@drawable/states_action_compose"
         android:title="Compose"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_Profile"
-        android:icon="@drawable/instagram_user_outline_24"
+        android:icon="@drawable/states_action_profile"
         android:title="Profile"
         app:showAsAction="always" />
 </menu>
