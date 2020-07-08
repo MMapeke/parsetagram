@@ -1,17 +1,20 @@
 package com.example.parsetagram;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
 
 import org.parceler.Parcels;
+
+import java.util.Date;
 
 public class PostDetails extends AppCompatActivity {
 
@@ -38,7 +41,8 @@ public class PostDetails extends AppCompatActivity {
 
         username.setText(post.getUser().getUsername());
         description.setText(post.getDescription());
-        timestamp.setText(post.getCreatedAt().toString());
+        Date date = post.getCreatedAt();
+        timestamp.setText((String) DateUtils.getRelativeTimeSpanString(date.getTime()));
 
         ParseFile image = post.getImage();
         if(image != null) {
