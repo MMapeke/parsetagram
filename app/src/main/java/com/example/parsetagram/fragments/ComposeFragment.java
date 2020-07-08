@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.parsetagram.MainActivity;
@@ -47,6 +48,7 @@ public class ComposeFragment extends Fragment {
     Button btnSubmit;
     EditText etDesc;
     Button btnCaptureImage;
+    ProgressBar pb;
 
     public String photoFileName = "photo.jpg";
     File photoFile;
@@ -76,6 +78,7 @@ public class ComposeFragment extends Fragment {
         ivPostImage = view.findViewById(R.id.ivPostImage);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
+        pb =  view.findViewById(R.id.pbLoading);
 
 //        queryPosts();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +94,7 @@ public class ComposeFragment extends Fragment {
                     return;
                 }
                 ParseUser currentUser =  ParseUser.getCurrentUser();
+
                 savePost(desc,currentUser,photoFile);
             }
         });
@@ -108,6 +112,7 @@ public class ComposeFragment extends Fragment {
         post.setDescription(desc);
         post.setImage(new ParseFile(photoFile));
         post.setUser(currentUser);
+        pb.setVisibility(ProgressBar.VISIBLE);
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -118,6 +123,7 @@ public class ComposeFragment extends Fragment {
                 Log.i(TAG,"Post save was successful!");
                 etDesc.setText("");
                 ivPostImage.setImageResource(0);
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }
