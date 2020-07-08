@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.parsetagram.MainActivity;
 import com.example.parsetagram.Post;
 import com.example.parsetagram.R;
@@ -80,7 +81,8 @@ public class ComposeFragment extends Fragment {
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         pb =  view.findViewById(R.id.pbLoading);
 
-//        queryPosts();
+        btnSubmit.setVisibility(View.GONE);
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,6 +126,8 @@ public class ComposeFragment extends Fragment {
                 etDesc.setText("");
                 ivPostImage.setImageResource(0);
                 pb.setVisibility(ProgressBar.INVISIBLE);
+                btnSubmit.setVisibility(View.GONE);
+                btnCaptureImage.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -158,6 +162,8 @@ public class ComposeFragment extends Fragment {
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(takenImage);
+                btnSubmit.setVisibility(View.VISIBLE);
+                btnCaptureImage.setVisibility(View.GONE);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
