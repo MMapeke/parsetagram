@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.parsetagram.Post;
 import com.example.parsetagram.PostsAdapter;
@@ -24,6 +25,8 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 /**
  * A simple {@link Fragment} subclass.
 
@@ -31,10 +34,11 @@ import java.util.List;
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
-    private RecyclerView rvPosts;
+    protected RecyclerView rvPosts;
     protected SwipeRefreshLayout swipeRefreshLayout;
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
+    protected Button btnLogout;
 
    public PostsFragment() {
         // Required empty public constructor
@@ -52,6 +56,9 @@ public class PostsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeRefreshLayout = view.findViewById(R.id.swipeContainer);
+        btnLogout = view.findViewById(R.id.btnLogout);
+        //removing btnLogout on main feed
+        btnLogout.setVisibility(View.GONE);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
