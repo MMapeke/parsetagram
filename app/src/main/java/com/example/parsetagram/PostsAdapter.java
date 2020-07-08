@@ -2,6 +2,7 @@ package com.example.parsetagram;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -53,12 +56,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView post_user;
         private ImageView post_image;
         private TextView post_desc;
+        private ImageView user_pic;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             post_user = itemView.findViewById(R.id.post_user);
             post_image = itemView.findViewById(R.id.post_pic);
             post_desc = itemView.findViewById(R.id.post_desc);
+            user_pic = itemView.findViewById(R.id.profilePic);
             itemView.setOnClickListener(this);
         }
 
@@ -73,6 +78,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }else{
                 post_image.setVisibility(View.GONE);
             }
+
+            Glide.with(context)
+                    .load(getProfileUrl(post.getUser().getObjectId()))
+                    .circleCrop()
+                    .into(user_pic);
         }
 
         @Override
@@ -93,9 +103,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    // Add a list of items -- change to type used
-    public void addAll(List<Post> list) {
-        posts.addAll(list);
-        notifyDataSetChanged();
+    // Create a gravatar image based on the hash value obtained from userId
+    private static String getProfileUrl(final String userId) {
+        String hex = "";
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("MD5");
+            final byte[] hash = digest.digest(userId.getBytes());
+            final BigInteger bigInt = new BigInteger(hash);
+            hex = bigInt.abs().toString(16);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "https://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
 }

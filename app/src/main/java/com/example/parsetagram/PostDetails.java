@@ -14,7 +14,10 @@ import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Date;
+
 
 public class PostDetails extends AppCompatActivity {
 
@@ -23,6 +26,7 @@ public class PostDetails extends AppCompatActivity {
     ImageView picture;
     TextView description;
     TextView timestamp;
+    ImageView profilePic;
 
     Post post;
 
@@ -35,6 +39,7 @@ public class PostDetails extends AppCompatActivity {
         picture = findViewById(R.id.details_pic);
         description = findViewById(R.id.details_desc);
         timestamp = findViewById(R.id.details_timestamp);
+        profilePic = findViewById(R.id.details_profilePic);
 
         post = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
         Log.i(TAG,"Showing details for " + description);
@@ -51,5 +56,23 @@ public class PostDetails extends AppCompatActivity {
         }else{
             picture.setVisibility(View.GONE);
         }
+
+        Glide.with(this)
+                .load(getProfileUrl(post.getUser().getObjectId()))
+                .circleCrop()
+                .into(profilePic);
+    }
+
+    private static String getProfileUrl(final String userId) {
+        String hex = "";
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("MD5");
+            final byte[] hash = digest.digest(userId.getBytes());
+            final BigInteger bigInt = new BigInteger(hash);
+            hex = bigInt.abs().toString(16);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "https://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
 }
