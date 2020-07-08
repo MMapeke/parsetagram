@@ -1,6 +1,7 @@
 package com.example.parsetagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return posts.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView post_user;
         private ImageView post_image;
@@ -56,6 +59,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             post_user = itemView.findViewById(R.id.post_user);
             post_image = itemView.findViewById(R.id.post_pic);
             post_desc = itemView.findViewById(R.id.post_desc);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
@@ -69,6 +73,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }else{
                 post_image.setVisibility(View.GONE);
             }
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+
+            //grabbing curr post
+            Post post = posts.get(position);
+            Intent intent = new Intent(context,PostDetails.class);
+            intent.putExtra("post", Parcels.wrap(post));
+            context.startActivity(intent);
         }
     }
 
