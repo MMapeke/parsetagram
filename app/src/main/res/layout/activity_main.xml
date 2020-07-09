@@ -8,11 +8,41 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:id="@+id/topheader"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/camera_shadow_fill"
+            android:outlineSpotShadowColor=""/>
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:src="@drawable/nav_logo_whiteout"
+            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/nav_inbox_paper_plane"
+            android:layout_gravity="end"/>
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/topheader"
         android:layout_above="@id/bottom_navigation" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         app:labelVisibilityMode="unlabeled"
@@ -21,4 +51,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/menu_bottom_navigation" />
+    </RelativeLayout>
 </RelativeLayout>

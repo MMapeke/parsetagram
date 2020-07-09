@@ -15,14 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.parsetagram.EndlessRecyclerViewScrollListener;
 import com.example.parsetagram.Post;
 import com.example.parsetagram.PostsAdapter;
 import com.example.parsetagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -39,8 +42,11 @@ public class PostsFragment extends Fragment {
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
     protected Button btnLogout;
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
+    protected Date oldestPost;
 
-   public PostsFragment() {
+    public PostsFragment() {
         // Required empty public constructor
     }
 
@@ -72,15 +78,50 @@ public class PostsFragment extends Fragment {
         postsAdapter = new PostsAdapter(getContext(),allPosts);
 
         rvPosts.setAdapter(postsAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(linearLayoutManager);
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                Log.i(TAG,"load more posts");
+                queryMorePosts(oldestPost);
+            }
+        };
+        rvPosts.addOnScrollListener(scrollListener);
 
         queryPosts();
+    }
+
+    private void queryMorePosts(final Date oldestPost) {
+        //query posts after oldest post
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(5);
+        query.whereLessThan(Post.KEY_CREATED_AT,oldestPost);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e != null){
+                    Log.e(TAG,"Issue with loading more posts",e);
+                    return;
+                }
+                allPosts.addAll(objects);
+                //updating new oldest post
+//                oldestPost = objects.get(objects.size()-1).getCreatedAt();
+                //add to profile view next
+                postsAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(20);
+        query.setLimit(2);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -94,6 +135,8 @@ public class PostsFragment extends Fragment {
 //                }
                 postsAdapter.clear();
                 allPosts.addAll(objects);
+                //updating last query item
+                oldestPost = objects.get(objects.size()-1).getCreatedAt();
                 swipeRefreshLayout.setRefreshing(false);
                 postsAdapter.notifyDataSetChanged();
             }
