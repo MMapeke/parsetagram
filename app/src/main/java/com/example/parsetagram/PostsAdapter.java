@@ -79,8 +79,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 post_image.setVisibility(View.GONE);
             }
 
+            ParseFile pfp = post.getUser().getParseFile("profilePic");
+
             Glide.with(context)
-                    .load(getProfileUrl(post.getUser().getObjectId()))
+                    .load(pfp.getUrl())
                     .circleCrop()
                     .into(user_pic);
         }

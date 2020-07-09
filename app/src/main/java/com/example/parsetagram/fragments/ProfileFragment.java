@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -145,6 +146,8 @@ public class ProfileFragment extends PostsFragment {
         query.setLimit(2);
         query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
         query.addDescendingOrder(Post.KEY_CREATED_AT);
+        //clearing before background call prevents recycle view and scroll refresh bug
+        postsAdapter.clear();
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
@@ -155,7 +158,6 @@ public class ProfileFragment extends PostsFragment {
 //                for (Post post: objects){
 //                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
 //                }
-                postsAdapter.clear();
                 oldestPost = objects.get(objects.size()-1).getCreatedAt();
                 allPosts.addAll(objects);
                 swipeRefreshLayout.setRefreshing(false);
@@ -182,8 +184,6 @@ public class ProfileFragment extends PostsFragment {
         return image;
     }
 
-    //TODO: endless scrolling on profile page
-    //TODO: Add default avatar image  in home screen
     //TODO: Make Adapter load from database not random
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -211,6 +211,7 @@ public class ProfileFragment extends PostsFragment {
                         Log.e(TAG,"uploaded pc no work",e);
                     }
                     Log.i(TAG,"pic worked");
+                    Toast.makeText(getContext(),"Profile Picture Changed",Toast.LENGTH_SHORT).show();
                 }
             });
 
