@@ -42,8 +42,9 @@ public class PostsFragment extends Fragment {
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
     protected Button btnLogout;
+    protected Button btnEditProfilePic;
     // Store a member variable for the listener
-    private EndlessRecyclerViewScrollListener scrollListener;
+    protected EndlessRecyclerViewScrollListener scrollListener;
     protected Date oldestPost;
 
     public PostsFragment() {
@@ -63,8 +64,10 @@ public class PostsFragment extends Fragment {
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeRefreshLayout = view.findViewById(R.id.swipeContainer);
         btnLogout = view.findViewById(R.id.btnLogout);
-        //removing btnLogout on main feed
+        btnEditProfilePic = view.findViewById(R.id.btnEditProfilePic);
+        //hiding profile buttons
         btnLogout.setVisibility(View.GONE);
+        btnEditProfilePic.setVisibility(View.GONE);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -87,7 +90,7 @@ public class PostsFragment extends Fragment {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
                 Log.i(TAG,"load more posts");
-                queryMorePosts(oldestPost);
+                queryMorePosts();
             }
         };
         rvPosts.addOnScrollListener(scrollListener);
@@ -95,7 +98,7 @@ public class PostsFragment extends Fragment {
         queryPosts();
     }
 
-    private void queryMorePosts(final Date oldestPost) {
+    protected void queryMorePosts() {
         //query posts after oldest post
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
@@ -105,13 +108,13 @@ public class PostsFragment extends Fragment {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
-                if (e != null){
-                    Log.e(TAG,"Issue with loading more posts",e);
+                if (e != null || objects.size() == 0){
+                    Log.e(TAG,"Issue with loading more posts or no more posts",e);
                     return;
                 }
                 allPosts.addAll(objects);
                 //updating new oldest post
-//                oldestPost = objects.get(objects.size()-1).getCreatedAt();
+                oldestPost = objects.get(objects.size()-1).getCreatedAt();
                 //add to profile view next
                 postsAdapter.notifyDataSetChanged();
             }
@@ -123,6 +126,7 @@ public class PostsFragment extends Fragment {
         query.include(Post.KEY_USER);
         query.setLimit(2);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
+        postsAdapter.clear();
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
@@ -133,7 +137,6 @@ public class PostsFragment extends Fragment {
 //                for (Post post: objects){
 //                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
 //                }
-                postsAdapter.clear();
                 allPosts.addAll(objects);
                 //updating last query item
                 oldestPost = objects.get(objects.size()-1).getCreatedAt();

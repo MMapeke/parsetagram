@@ -23,7 +23,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/camera_shadow_fill"
-            android:outlineSpotShadowColor=""/>
+            android:outlineSpotShadowColor="#000000"/>
         <ImageView
             android:layout_width="64dp"
             android:layout_height="48dp"

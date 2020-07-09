@@ -188,22 +188,4 @@ public class ComposeFragment extends Fragment {
         return file;
     }
 
-
-
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e != null){
-                    Log.e(TAG,"Issue w getting posts",e);
-                    return;
-                }
-                for (Post post: objects){
-                    Log.i(TAG, "Post: " + post.getDescription() + "\nUsername: " + post.getUser().getUsername());
-                }
-            }
-        });
-    }
 }
