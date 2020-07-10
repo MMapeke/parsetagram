@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PostDetails"></activity>
+        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".PostDetails" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

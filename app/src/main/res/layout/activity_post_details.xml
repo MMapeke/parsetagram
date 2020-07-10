@@ -38,7 +38,7 @@
     <ImageView
         android:id="@+id/details_pic"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="425dp"
         android:scaleType="centerCrop"
         tools:layout_editor_absoluteX="173dp"
         tools:layout_editor_absoluteY="179dp"
@@ -80,18 +80,34 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/details_desc"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="4dp"
-        android:text="Description..." />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/details_post_desc_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="username"
+            android:textColor="#050505"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/details_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="Description..." />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/details_timestamp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
         android:text="Timestamp" />
 
 

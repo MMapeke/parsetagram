@@ -27,6 +27,7 @@ public class PostDetails extends AppCompatActivity {
     TextView description;
     TextView timestamp;
     ImageView profilePic;
+    TextView desc_username;
 
     Post post;
 
@@ -40,10 +41,12 @@ public class PostDetails extends AppCompatActivity {
         description = findViewById(R.id.details_desc);
         timestamp = findViewById(R.id.details_timestamp);
         profilePic = findViewById(R.id.details_profilePic);
+        desc_username = findViewById(R.id.details_post_desc_user);
 
         post = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
         Log.i(TAG,"Showing details for " + description);
 
+        desc_username.setText(post.getUser().getUsername());
         username.setText(post.getUser().getUsername());
         description.setText(post.getDescription());
         Date date = post.getCreatedAt();
@@ -57,22 +60,11 @@ public class PostDetails extends AppCompatActivity {
             picture.setVisibility(View.GONE);
         }
 
+        ParseFile pfp = post.getUser().getParseFile("profilePic");
+
         Glide.with(this)
-                .load(getProfileUrl(post.getUser().getObjectId()))
+                .load(pfp.getUrl())
                 .circleCrop()
                 .into(profilePic);
-    }
-
-    private static String getProfileUrl(final String userId) {
-        String hex = "";
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("MD5");
-            final byte[] hash = digest.digest(userId.getBytes());
-            final BigInteger bigInt = new BigInteger(hash);
-            hex = bigInt.abs().toString(16);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "https://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
 }
