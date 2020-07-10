@@ -97,4 +97,5 @@
             android:layout_marginRight="4dp"
             android:textColor="#A6A6A6" />
     </LinearLayout>
+
 </LinearLayout>

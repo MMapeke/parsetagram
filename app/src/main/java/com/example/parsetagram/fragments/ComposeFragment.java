@@ -20,7 +20,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,6 +50,8 @@ public class ComposeFragment extends Fragment {
     ImageView ivPostImage;
     Button btnSubmit;
     EditText etDesc;
+    RelativeLayout btnCapture;
+    Button btnCaptureVideo;
     Button btnCaptureImage;
     ProgressBar pb;
 
@@ -55,6 +59,7 @@ public class ComposeFragment extends Fragment {
     File photoFile;
 
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public static final int CAPTURE_VIDEO_ACTIVITY_REQUEST = 1234;
 
     public ComposeFragment() {
         // Required empty public constructor
@@ -80,6 +85,8 @@ public class ComposeFragment extends Fragment {
         btnSubmit = view.findViewById(R.id.btnSubmit);
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         pb =  view.findViewById(R.id.pbLoading);
+        btnCapture = view.findViewById(R.id.btnCapture);
+        btnCaptureVideo = view.findViewById(R.id.btnCaptureVideo);
 
         btnSubmit.setVisibility(View.GONE);
 
@@ -105,6 +112,14 @@ public class ComposeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 onLaunchCamera();
+            }
+        });
+
+        btnCaptureVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Not implemented
+//                onLaunchVideoCamera();
             }
         });
     }
@@ -152,6 +167,16 @@ public class ComposeFragment extends Fragment {
         }
     }
 
+//    private void onLaunchVideoCamera() {
+//        //TODO: Intent to video camera, limit vid duration, save in right place
+//        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//        //limiting to 10 seconds
+//        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10);
+//        //0 is low quality, 1 is high quality
+//        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0);
+//
+//    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -163,7 +188,7 @@ public class ComposeFragment extends Fragment {
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(takenImage);
                 btnSubmit.setVisibility(View.VISIBLE);
-                btnCaptureImage.setVisibility(View.GONE);
+                btnCapture.setVisibility(View.GONE);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
